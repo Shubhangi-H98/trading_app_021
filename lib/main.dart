@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trading_app_021/presentation/holdings/bloc/portfolio_bloc.dart';
+import 'package:trading_app_021/presentation/holdings/bloc/portfolio_event.dart%20%20Dart.dart';
 import 'core/theme/app_theme.dart';
 import 'data/datasources/local_storage_service.dart';
 import 'data/datasources/mock_market_feed_service.dart';
@@ -32,6 +34,9 @@ class TradingApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => WatchlistBloc(localStorageService)..add(LoadWatchlistsEvent()),
+        ),
+        BlocProvider(
+          create: (_) => PortfolioBloc(localStorageService)..add(LoadPortfolioEvent()),
         ),
       ],
       child: MaterialApp(

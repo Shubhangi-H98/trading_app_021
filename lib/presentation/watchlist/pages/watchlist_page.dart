@@ -5,6 +5,7 @@ import '../../../data/model/watchlist_model.dart';
 import '../../market/bloc/market_bloc.dart';
 import '../../market/bloc/market_state.dart';
 import '../../market/widgets/market_stock_tile.dart';
+import '../../order/widgets/order_ticket_bottom_sheet.dart';
 import '../bloc/watchlist_bloc.dart';
 import '../bloc/watchlist_event.dart';
 import '../bloc/watchlist_state.dart';
@@ -226,12 +227,13 @@ class _WatchlistContentView extends StatelessWidget {
                       key: ValueKey(symbol),
                       stock: stock,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Selected $symbol (Buy/Sell ticket will open)'),
-                            duration: const Duration(seconds: 1),
-                          ),
-                        );
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(
+                        //     content: Text('Selected $symbol (Buy/Sell ticket will open)'),
+                        //     duration: const Duration(seconds: 1),
+                        //   ),
+                        // );
+                        OrderTicketBottomSheet.show(context, symbol);
                       },
                     ),
                   );

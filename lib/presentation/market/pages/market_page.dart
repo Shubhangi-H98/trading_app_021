@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../order/widgets/order_ticket_bottom_sheet.dart';
 import '../bloc/market_bloc.dart';
 import '../bloc/market_event.dart';
 import '../bloc/market_state.dart';
@@ -43,12 +44,13 @@ class MarketPage extends StatelessWidget {
               return MarketStockTile(
                 stock: stock,
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Selected ${stock.symbol} (Order ticket opens here)'),
-                      duration: const Duration(seconds: 1),
-                    ),
-                  );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text('Selected ${stock.symbol} (Order ticket opens here)'),
+                  //     duration: const Duration(seconds: 1),
+                  //   ),
+                  // );
+                  OrderTicketBottomSheet.show(context, stock.symbol);
                 },
               );
             },
