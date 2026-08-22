@@ -19,9 +19,22 @@ class LocalStorageService {
   // --- Watchlists Persistence ---
   List<WatchlistModel> getWatchlists() {
     final raw = _prefs.getString(_keyWatchlists);
-    if (raw == null) return _defaultWatchlists();
-    final List<dynamic> decoded = jsonDecode(raw);
-    return decoded.map((e) => WatchlistModel.fromJson(e)).toList();
+    if (raw == null || raw.isEmpty || raw == '[]') {
+      final defaults = _defaultWatchlists();
+      saveWatchlists(defaults); // Automatically saves default watchlists
+      return defaults;
+    }
+    try {
+      final List<dynamic> decoded = jsonDecode(raw);
+      if (decoded.isEmpty) {
+        final defaults = _defaultWatchlists();
+        saveWatchlists(defaults);
+        return defaults;
+      }
+      return decoded.map((e) => WatchlistModel.fromJson(e)).toList();
+    } catch (_) {
+      return _defaultWatchlists();
+    }
   }
 
   Future<void> saveWatchlists(List<WatchlistModel> watchlists) async {
