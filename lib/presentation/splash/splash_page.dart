@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../login/login_screen.dart';
+
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -16,7 +18,12 @@ class _SplashPageState extends State<SplashPage> {
       const Duration(seconds: 2),
           () {
         if (!mounted) return;
-
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const LoginPage(),
+          ),
+        );
       },
     );
   }

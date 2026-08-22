@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trading_app_021/presentation/splash/splash_page.dart';
 import 'core/theme/app_theme.dart';
-import 'presentation/splash/pages/splash_page.dart';
+
 
 void main() {
   runApp(const TradingApp());
