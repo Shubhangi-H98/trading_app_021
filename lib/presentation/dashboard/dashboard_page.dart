@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../holdings/pages/holdings_page.dart';
 import '../market/pages/market_page.dart';
+import '../order/pages/orders_page.dart';
 import '../watchlist/pages/watchlist_page.dart';
-
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
@@ -16,6 +16,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   final List<Widget> _pages = const [
     WatchlistPage(),
+    OrdersPage(),
     MarketPage(),
     HoldingsPage(),
   ];
@@ -44,6 +45,11 @@ class _DashboardPageState extends State<DashboardPage> {
             icon: Icon(Icons.bookmark_border),
             selectedIcon: Icon(Icons.bookmark, color: AppColors.primary),
             label: 'Watchlist',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.receipt_long_outlined),
+            selectedIcon: Icon(Icons.receipt_long, color: AppColors.primary),
+            label: 'Orders',
           ),
           NavigationDestination(
             icon: Icon(Icons.show_chart_outlined),
