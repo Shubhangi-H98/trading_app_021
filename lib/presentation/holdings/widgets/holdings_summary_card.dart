@@ -20,16 +20,17 @@ class HoldingsSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isProfit = totalPl >= 0;
     final plColor = isProfit ? AppColors.greenUp : AppColors.redDown;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -43,7 +44,13 @@ class HoldingsSummaryCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Invested Value', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                  Text(
+                    'Invested Value',
+                    style: TextStyle(
+                      color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                      fontSize: 12,
+                    ),
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     CurrencyFormatter.format(totalInvested),
@@ -54,7 +61,13 @@ class HoldingsSummaryCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text('Current Value', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                  Text(
+                    'Current Value',
+                    style: TextStyle(
+                      color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                      fontSize: 12,
+                    ),
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     CurrencyFormatter.format(currentValue),
@@ -64,7 +77,10 @@ class HoldingsSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-          const Divider(height: 24, color: AppColors.divider),
+          Divider(
+            height: 24,
+            color: isDark ? AppColors.borderDark : AppColors.borderLight,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

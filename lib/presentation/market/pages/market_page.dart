@@ -12,11 +12,12 @@ class MarketPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Live Market', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
         elevation: 0.5,
         actions: [
           // Stress Test Speed Controller Sheet
@@ -38,18 +39,15 @@ class MarketPage extends StatelessWidget {
           return ListView.separated(
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: stockList.length,
-            separatorBuilder: (_, __) => const Divider(height: 1, color: AppColors.border),
+            separatorBuilder: (_, __) => Divider(
+              height: 1,
+              color: isDark ? AppColors.borderDark : AppColors.borderLight,
+            ),
             itemBuilder: (context, index) {
               final stock = stockList[index];
               return MarketStockTile(
                 stock: stock,
                 onTap: () {
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   SnackBar(
-                  //     content: Text('Selected ${stock.symbol} (Order ticket opens here)'),
-                  //     duration: const Duration(seconds: 1),
-                  //   ),
-                  // );
                   OrderTicketBottomSheet.show(context, stock.symbol);
                 },
               );

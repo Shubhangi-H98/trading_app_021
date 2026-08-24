@@ -19,10 +19,9 @@ class HoldingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Holdings & Portfolio', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
         elevation: 0.5,
         actions: [
           BlocBuilder<PortfolioBloc, PortfolioState>(
@@ -46,16 +45,26 @@ class HoldingsPage extends StatelessWidget {
           final holdings = portfolioState.holdings;
 
           if (holdings.isEmpty) {
+            final isDark = Theme.of(context).brightness == Brightness.dark;
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.account_balance_wallet_outlined, size: 64, color: AppColors.textMuted),
-                  SizedBox(height: 12),
-                  Text('No active holdings', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 4),
-                  Text('Place a Buy order from Watchlist to see your portfolio',
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                children: [
+                  Icon(
+                    Icons.account_balance_wallet_outlined,
+                    size: 64,
+                    color: isDark ? AppColors.textSecondaryDark : AppColors.textMuted,
+                  ),
+                  const SizedBox(height: 12),
+                  const Text('No active holdings', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Place a Buy order from Watchlist to see your portfolio',
+                    style: TextStyle(
+                      color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                      fontSize: 13,
+                    ),
+                  ),
                 ],
               ),
             );

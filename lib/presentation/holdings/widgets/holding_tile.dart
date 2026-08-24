@@ -18,6 +18,7 @@ class HoldingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final ltp = stock?.ltp ?? holding.averageBuyPrice;
     final currentValue = holding.quantity * ltp;
     final totalCost = holding.quantity * holding.averageBuyPrice;
@@ -30,9 +31,14 @@ class HoldingTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(bottom: BorderSide(color: AppColors.border, width: 0.5)),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          border: Border(
+            bottom: BorderSide(
+              color: isDark ? AppColors.borderDark : AppColors.borderLight,
+              width: 0.5,
+            ),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,7 +53,10 @@ class HoldingTile extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   'Qty: ${holding.quantity} • Avg: ${CurrencyFormatter.format(holding.averageBuyPrice)}',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                  style: TextStyle(
+                    color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),

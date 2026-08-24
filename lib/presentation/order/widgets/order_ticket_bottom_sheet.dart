@@ -55,6 +55,8 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return BlocBuilder<MarketBloc, MarketState>(
       builder: (context, marketState) {
         final stock = marketState.stocks[widget.symbol];
@@ -83,6 +85,8 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
 
             final isBuy = _side == OrderType.buy;
             final themeColor = isBuy ? AppColors.greenUp : AppColors.redDown;
+            final inactiveBtnBg = isDark ? Colors.white.withOpacity(0.08) : Colors.grey.shade200;
+            final inactiveBtnFg = isDark ? Colors.white70 : Colors.black87;
 
             return Container(
               padding: EdgeInsets.only(
@@ -91,9 +95,9 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                 right: 20,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 20,
               ),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -110,8 +114,13 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                             widget.symbol,
                             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          const Text('NSE Regular Market Order',
-                              style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                          Text(
+                            'NSE Regular Market Order',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                            ),
+                          ),
                         ],
                       ),
                       Column(
@@ -145,8 +154,8 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                         child: ElevatedButton(
                           onPressed: () => setState(() => _side = OrderType.buy),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: isBuy ? AppColors.greenUp : Colors.grey.shade200,
-                            foregroundColor: isBuy ? Colors.white : Colors.black87,
+                            backgroundColor: isBuy ? AppColors.greenUp : inactiveBtnBg,
+                            foregroundColor: isBuy ? Colors.white : inactiveBtnFg,
                             elevation: 0,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           ),
@@ -158,8 +167,8 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                         child: ElevatedButton(
                           onPressed: () => setState(() => _side = OrderType.sell),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: !isBuy ? AppColors.redDown : Colors.grey.shade200,
-                            foregroundColor: !isBuy ? Colors.white : Colors.black87,
+                            backgroundColor: !isBuy ? AppColors.redDown : inactiveBtnBg,
+                            foregroundColor: !isBuy ? Colors.white : inactiveBtnFg,
                             elevation: 0,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           ),
@@ -192,7 +201,10 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                         isBuy
                             ? 'Available Balance: ${CurrencyFormatter.format(walletBalance)}'
                             : 'Held Quantity: $availableQty Shares',
-                        style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                        ),
                       ),
                       Text(
                         'Total: ${CurrencyFormatter.format(orderTotal)}',
@@ -207,7 +219,7 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
-                        color: AppColors.redFlash,
+                        color: isDark ? Colors.red.shade900.withOpacity(0.4) : AppColors.redFlash,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(

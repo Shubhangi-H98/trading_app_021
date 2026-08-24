@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/model/watchlist_model.dart';
+import '../../dashboard/widgets/app_side_drawer.dart';
 import '../../market/bloc/market_bloc.dart';
 import '../../market/bloc/market_state.dart';
 import '../../market/widgets/market_stock_tile.dart';
@@ -27,7 +28,17 @@ class WatchlistPage extends StatelessWidget {
 
         if (watchlists.isEmpty) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Watchlist', style: TextStyle(fontWeight: FontWeight.bold))),
+            drawer: const AppSideDrawer(),
+            appBar: AppBar(
+              leading: Builder(
+                builder: (innerContext) => IconButton(
+                  icon: const Icon(Icons.menu),
+                  tooltip: 'Open Menu',
+                  onPressed: () => Scaffold.of(innerContext).openDrawer(),
+                ),
+              ),
+              title: const Text('Watchlist', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -50,10 +61,17 @@ class WatchlistPage extends StatelessWidget {
         return DefaultTabController(
           length: watchlists.length,
           child: Scaffold(
-            backgroundColor: AppColors.background,
+            drawer: const AppSideDrawer(),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: AppBar(
+              leading: Builder(
+                builder: (innerContext) => IconButton(
+                  icon: const Icon(Icons.menu),
+                  tooltip: 'Open Menu',
+                  onPressed: () => Scaffold.of(innerContext).openDrawer(),
+                ),
+              ),
               title: const Text('Watchlists', style: TextStyle(fontWeight: FontWeight.bold)),
-              backgroundColor: Colors.white,
               elevation: 0.5,
               actions: [
                 IconButton(
@@ -107,7 +125,7 @@ class _WatchlistContentView extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -227,12 +245,6 @@ class _WatchlistContentView extends StatelessWidget {
                       key: ValueKey(symbol),
                       stock: stock,
                       onTap: () {
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //   SnackBar(
-                        //     content: Text('Selected $symbol (Buy/Sell ticket will open)'),
-                        //     duration: const Duration(seconds: 1),
-                        //   ),
-                        // );
                         OrderTicketBottomSheet.show(context, symbol);
                       },
                     ),

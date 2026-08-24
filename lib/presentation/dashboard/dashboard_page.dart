@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
-import '../watchlist/pages/watchlist_page.dart';
-import '../market/pages/market_page.dart';
+import '../../../core/theme/app_colors.dart';
 import '../holdings/pages/holdings_page.dart';
+import '../market/pages/market_page.dart';
+import '../watchlist/pages/watchlist_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -22,6 +22,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
@@ -29,12 +32,13 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
+        backgroundColor: theme.cardColor,
+        indicatorColor: AppColors.primary.withOpacity(isDark ? 0.3 : 0.12),
         onDestinationSelected: (index) {
           setState(() {
             _currentIndex = index;
           });
         },
-        indicatorColor: AppColors.primary.withOpacity(0.12),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.bookmark_border),

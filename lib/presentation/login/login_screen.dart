@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../../core/theme/app_colors.dart';
 import '../dashboard/dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -31,20 +31,20 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Login successful! Welcome to 021 Trading.'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppColors.greenUp,
           duration: Duration(seconds: 1),
         ),
       );
-
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -60,11 +60,11 @@ class _LoginPageState extends State<LoginPage> {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1E293B),
+                        color: AppColors.primary,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: isDark ? Colors.black45 : Colors.black.withOpacity(0.08),
                             blurRadius: 15,
                             offset: const Offset(0, 8),
                           ),
@@ -91,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
                       'Welcome to 021 Trading',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xFF0F172A),
                       ),
                     ),
                   ),
@@ -99,8 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: Text(
                       'Fast, reliable, real-time market execution',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF64748B),
+                      style: TextStyle(
+                        color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                       ),
                     ),
                   ),
@@ -112,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF334155),
+                      color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -121,17 +120,24 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       hintText: 'Enter your email',
-                      prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFF64748B)),
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                      ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: theme.cardColor,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                        borderSide: BorderSide(
+                          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                        borderSide: BorderSide(
+                          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -149,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF334155),
+                      color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -158,11 +164,14 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       hintText: 'Enter your password',
-                      prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF64748B)),
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                          color: const Color(0xFF64748B),
+                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                         ),
                         onPressed: () {
                           setState(() {
@@ -171,15 +180,19 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: theme.cardColor,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                        borderSide: BorderSide(
+                          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                        borderSide: BorderSide(
+                          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -199,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text(
                         'Forgot Password?',
                         style: TextStyle(
-                          color: Color(0xFF2563EB),
+                          color: AppColors.primary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -211,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     onPressed: _handleLogin,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2563EB),
+                      backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
@@ -230,20 +243,22 @@ class _LoginPageState extends State<LoginPage> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
+                      color: isDark ? AppColors.surfaceDark : const Color(0xFFEFF6FF),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFBFDBFE)),
+                      border: Border.all(
+                        color: isDark ? AppColors.borderDark : const Color(0xFFBFDBFE),
+                      ),
                     ),
                     child: Row(
-                      children: const [
-                        Icon(Icons.info_outline, color: Color(0xFF2563EB), size: 20),
-                        SizedBox(width: 8),
+                      children: [
+                        const Icon(Icons.info_outline, color: AppColors.primary, size: 20),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             'Demo mode: Tap Log In to enter the trading terminal.',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Color(0xFF1E40AF),
+                              color: isDark ? Colors.white70 : const Color(0xFF1E40AF),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
