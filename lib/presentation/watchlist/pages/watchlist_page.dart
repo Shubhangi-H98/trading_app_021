@@ -5,6 +5,7 @@ import '../../../data/model/watchlist_model.dart';
 import '../../dashboard/widgets/app_side_drawer.dart';
 import '../../market/bloc/market_bloc.dart';
 import '../../market/bloc/market_state.dart';
+import '../../market/pages/stock_detail_page.dart';
 import '../../market/widgets/market_stock_tile.dart';
 import '../../order/widgets/order_ticket_bottom_sheet.dart';
 import '../bloc/watchlist_bloc.dart';
@@ -245,7 +246,12 @@ class _WatchlistContentView extends StatelessWidget {
                       key: ValueKey(symbol),
                       stock: stock,
                       onTap: () {
-                        OrderTicketBottomSheet.show(context, symbol);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => StockDetailPage(symbol: symbol),
+                          ),
+                        );
                       },
                     ),
                   );

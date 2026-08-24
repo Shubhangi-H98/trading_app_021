@@ -5,6 +5,7 @@ import '../../../core/utils/currency_formatter.dart';
 import '../../../data/model/holding_model.dart';
 import '../../market/bloc/market_bloc.dart';
 import '../../market/bloc/market_state.dart';
+import '../../market/pages/stock_detail_page.dart';
 import '../../order/widgets/order_ticket_bottom_sheet.dart';
 import '../bloc/portfolio_bloc.dart';
 import '../bloc/portfolio_event.dart  Dart.dart';
@@ -129,7 +130,12 @@ class HoldingsPage extends StatelessWidget {
                           holding: holding,
                           stock: stock,
                           onTap: () {
-                            OrderTicketBottomSheet.show(context, holding.symbol);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => StockDetailPage(symbol: holding.symbol),
+                              ),
+                            );
                           },
                         );
                       },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trading_app_021/presentation/market/pages/stock_detail_page.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../order/widgets/order_ticket_bottom_sheet.dart';
 import '../bloc/market_bloc.dart';
@@ -48,7 +49,12 @@ class MarketPage extends StatelessWidget {
               return MarketStockTile(
                 stock: stock,
                 onTap: () {
-                  OrderTicketBottomSheet.show(context, stock.symbol);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => StockDetailPage(symbol: stock.symbol),
+                    ),
+                  );
                 },
               );
             },

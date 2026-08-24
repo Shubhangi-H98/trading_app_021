@@ -66,7 +66,7 @@ class _MarketStockTileState extends State<MarketStockTile> with SingleTickerProv
 
     return Stack(
       children: [
-        // Base Tile Container (Instantly reacts to Dark/Light Theme change)
+        // Base Tile Container (Clean, compact, instant dark/light theme reaction)
         Container(
           color: theme.cardColor,
           child: ListTile(
