@@ -6,7 +6,6 @@ import '../../../data/model/holding_model.dart';
 import '../../market/bloc/market_bloc.dart';
 import '../../market/bloc/market_state.dart';
 import '../../market/pages/stock_detail_page.dart';
-import '../../order/widgets/order_ticket_bottom_sheet.dart';
 import '../bloc/portfolio_bloc.dart';
 import '../bloc/portfolio_event.dart';
 import '../bloc/portfolio_state.dart';
