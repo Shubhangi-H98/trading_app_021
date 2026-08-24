@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/currency_formatter.dart';
+import '../../../core/utils/feedback_helper.dart';
 import '../../../data/model/holding_model.dart';
 import '../../../data/model/order_model.dart';
 import '../../holdings/bloc/portfolio_bloc.dart';
@@ -16,6 +17,7 @@ class OrderTicketBottomSheet extends StatefulWidget {
   const OrderTicketBottomSheet({super.key, required this.symbol});
 
   static void show(BuildContext context, String symbol) {
+    FeedbackHelper.lightClick();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -152,7 +154,10 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () => setState(() => _side = OrderType.buy),
+                          onPressed: () {
+                            FeedbackHelper.lightClick();
+                            setState(() => _side = OrderType.buy);
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isBuy ? AppColors.greenUp : inactiveBtnBg,
                             foregroundColor: isBuy ? Colors.white : inactiveBtnFg,
@@ -165,7 +170,10 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () => setState(() => _side = OrderType.sell),
+                          onPressed: () {
+                            FeedbackHelper.lightClick();
+                            setState(() => _side = OrderType.sell);
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: !isBuy ? AppColors.redDown : inactiveBtnBg,
                             foregroundColor: !isBuy ? Colors.white : inactiveBtnFg,
@@ -235,10 +243,11 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
 
                   const SizedBox(height: 24),
 
-                  // Execute Order Button
+                  // Execute Order Button with Haptic & Sound Confirmation
                   ElevatedButton(
                     onPressed: error == null && _quantity > 0 && currentLtp > 0
                         ? () {
+                      FeedbackHelper.orderSuccess();
                       context.read<PortfolioBloc>().add(
                         ExecuteOrderEvent(
                           symbol: widget.symbol,

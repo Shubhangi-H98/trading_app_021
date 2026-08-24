@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/feedback_helper.dart';
 import '../../../data/model/watchlist_model.dart';
 import '../../dashboard/widgets/app_side_drawer.dart';
 import '../../market/bloc/market_bloc.dart';
 import '../../market/bloc/market_state.dart';
 import '../../market/pages/stock_detail_page.dart';
+import '../../market/widgets/market_indices_bar.dart';
 import '../../market/widgets/market_stock_tile.dart';
-import '../../order/widgets/order_ticket_bottom_sheet.dart';
 import '../bloc/watchlist_bloc.dart';
 import '../bloc/watchlist_event.dart';
 import '../bloc/watchlist_state.dart';
@@ -78,7 +79,10 @@ class WatchlistPage extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.add),
                   tooltip: 'Create Watchlist',
-                  onPressed: () => _openCreateDialog(context),
+                  onPressed: () {
+                    FeedbackHelper.lightClick();
+                    _openCreateDialog(context);
+                  },
                 ),
               ],
               bottom: TabBar(
@@ -87,13 +91,22 @@ class WatchlistPage extends StatelessWidget {
                 indicatorColor: AppColors.primary,
                 labelColor: AppColors.primary,
                 unselectedLabelColor: AppColors.textSecondary,
+                onTap: (_) => FeedbackHelper.lightClick(),
                 tabs: watchlists.map((w) => Tab(text: w.name)).toList(),
               ),
             ),
-            body: TabBarView(
-              children: watchlists.map((watchlist) {
-                return _WatchlistContentView(watchlist: watchlist);
-              }).toList(),
+            body: Column(
+              children: [
+                // Pinned Zerodha-Style NIFTY 50 / SENSEX Indices Top Bar
+                const MarketIndicesBar(),
+                Expanded(
+                  child: TabBarView(
+                    children: watchlists.map((watchlist) {
+                      return _WatchlistContentView(watchlist: watchlist);
+                    }).toList(),
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -106,6 +119,7 @@ class WatchlistPage extends StatelessWidget {
       context: context,
       builder: (_) => CreateWatchlistDialog(
         onSave: (name) {
+          FeedbackHelper.lightClick();
           context.read<WatchlistBloc>().add(CreateWatchlistEvent(name));
         },
       ),
@@ -140,11 +154,13 @@ class _WatchlistContentView extends StatelessWidget {
                     icon: const Icon(Icons.edit_outlined, size: 20),
                     tooltip: 'Rename',
                     onPressed: () {
+                      FeedbackHelper.lightClick();
                       showDialog(
                         context: context,
                         builder: (_) => CreateWatchlistDialog(
                           initialName: watchlist.name,
                           onSave: (newName) {
+                            FeedbackHelper.lightClick();
                             context.read<WatchlistBloc>().add(
                               RenameWatchlistEvent(watchlistId: watchlist.id, newName: newName),
                             );
@@ -157,6 +173,7 @@ class _WatchlistContentView extends StatelessWidget {
                     icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.redDown),
                     tooltip: 'Delete',
                     onPressed: () {
+                      FeedbackHelper.deleteImpact();
                       context.read<WatchlistBloc>().add(DeleteWatchlistEvent(watchlist.id));
                     },
                   ),
@@ -164,6 +181,7 @@ class _WatchlistContentView extends StatelessWidget {
                     icon: const Icon(Icons.add_circle, color: AppColors.primary),
                     tooltip: 'Add Stock',
                     onPressed: () {
+                      FeedbackHelper.lightClick();
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
@@ -191,6 +209,7 @@ class _WatchlistContentView extends StatelessWidget {
                 const Text('No stocks in this watchlist'),
                 TextButton.icon(
                   onPressed: () {
+                    FeedbackHelper.lightClick();
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -211,6 +230,7 @@ class _WatchlistContentView extends StatelessWidget {
               return ReorderableListView.builder(
                 itemCount: symbols.length,
                 onReorder: (oldIndex, newIndex) {
+                  FeedbackHelper.lightClick();
                   context.read<WatchlistBloc>().add(
                     ReorderStocksEvent(
                       watchlistId: watchlist.id,
@@ -235,6 +255,7 @@ class _WatchlistContentView extends StatelessWidget {
                       child: const Icon(Icons.delete, color: Colors.white),
                     ),
                     onDismissed: (_) {
+                      FeedbackHelper.deleteImpact();
                       context.read<WatchlistBloc>().add(
                         RemoveStockFromWatchlistEvent(
                           watchlistId: watchlist.id,
@@ -246,6 +267,7 @@ class _WatchlistContentView extends StatelessWidget {
                       key: ValueKey(symbol),
                       stock: stock,
                       onTap: () {
+                        FeedbackHelper.lightClick();
                         Navigator.push(
                           context,
                           MaterialPageRoute(

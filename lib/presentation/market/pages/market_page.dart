@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trading_app_021/presentation/market/pages/stock_detail_page.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../order/widgets/order_ticket_bottom_sheet.dart';
+import '../../../core/utils/feedback_helper.dart';
 import '../bloc/market_bloc.dart';
 import '../bloc/market_event.dart';
 import '../bloc/market_state.dart';
+import '../pages/stock_detail_page.dart';
+import '../widgets/market_indices_bar.dart';
 import '../widgets/market_stock_tile.dart';
 
 class MarketPage extends StatelessWidget {
@@ -21,45 +22,56 @@ class MarketPage extends StatelessWidget {
         title: const Text('Live Market', style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0.5,
         actions: [
-          // Stress Test Speed Controller Sheet
           IconButton(
             icon: const Icon(Icons.speed),
             tooltip: 'Stress Test Tick Rate',
-            onPressed: () => _showTickRateSheet(context),
+            onPressed: () {
+              FeedbackHelper.lightClick();
+              _showTickRateSheet(context);
+            },
           ),
         ],
       ),
-      body: BlocBuilder<MarketBloc, MarketState>(
-        builder: (context, state) {
-          if (state.stocks.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        children: [
+          // Pinned Market Indices Top Bar
+          const MarketIndicesBar(),
+          Expanded(
+            child: BlocBuilder<MarketBloc, MarketState>(
+              builder: (context, state) {
+                if (state.stocks.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          final stockList = state.stocks.values.toList();
+                final stockList = state.stocks.values.toList();
 
-          return ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: stockList.length,
-            separatorBuilder: (_, __) => Divider(
-              height: 1,
-              color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                return ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: stockList.length,
+                  separatorBuilder: (_, __) => Divider(
+                    height: 1,
+                    color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                  ),
+                  itemBuilder: (context, index) {
+                    final stock = stockList[index];
+                    return MarketStockTile(
+                      stock: stock,
+                      onTap: () {
+                        FeedbackHelper.lightClick();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => StockDetailPage(symbol: stock.symbol),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
             ),
-            itemBuilder: (context, index) {
-              final stock = stockList[index];
-              return MarketStockTile(
-                stock: stock,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => StockDetailPage(symbol: stock.symbol),
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        },
+          ),
+        ],
       ),
     );
   }
@@ -96,6 +108,7 @@ class MarketPage extends StatelessWidget {
                     divisions: 49,
                     label: '${state.tickRate} ticks/sec',
                     onChanged: (value) {
+                      FeedbackHelper.lightClick();
                       BlocProvider.of<MarketBloc>(context).add(
                         ChangeTickRateEvent(value.round()),
                       );
