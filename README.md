@@ -1,17 +1,28 @@
-# trading_app_021
+# 📈 Live Stock Trading & Simulation Engine
 
-A new Flutter project.
+A high-performance Flutter trading simulation application built with **Clean Architecture** and **BLoC State Management**. Features high-frequency real-time mock price feeds, dynamic benchmark index tracking, interactive order routing, native haptics, and local persistence.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Key Features
 
-A few resources to get you started if this is your first Flutter project:
+- **⚡ High-Frequency Market Stream:** Real-time multi-stock price feed with configurable tick rate (1 to 50 ticks/sec).
+- **📊 Benchmark Indices Bar:** Real-time dynamic NIFTY 50 and SENSEX benchmark tracking.
+- **📈 Real-Time Charting:** Dynamic waveform price sparklines and volume/high/low/spread metrics.
+- **📋 Watchlist Management:** Custom watchlist creation, multi-tab filtering, reordering, and swipe-to-delete.
+- **💼 Interactive Order Execution:**
+    - Live margin and held-quantity checks.
+    - Animated auto-dismissing success dialog (1.5s).
+    - One-tap quick wallet top-up modal.
+- **📳 Native Haptics:** Integrated haptic feedback on tab changes, deletion impacts, and trade confirmations.
+- **💾 Local Persistence:** Offline-first state persistence for wallet balance, holdings, and order audit history.
+- **🌗 Theme Toggle:** Seamless dark/light theme switching.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🏛️ Architecture & Tech Stack
+
+- **State Management:** `flutter_bloc`
+- **Architecture:** Clean Architecture (Presentation, Domain, Data Layers)
+- **Persistence:** `shared_preferences`, `sqflite`
+- **Formatting & Helpers:** `intl`
