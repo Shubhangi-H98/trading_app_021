@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trading_app_021/presentation/holdings/bloc/portfolio_event.dart%20%20Dart.dart';
+import 'package:trading_app_021/presentation/holdings/bloc/portfolio_event.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_cubit.dart';
 import 'data/datasources/local_storage_service.dart';

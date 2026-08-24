@@ -8,7 +8,7 @@ import '../../market/bloc/market_state.dart';
 import '../../market/pages/stock_detail_page.dart';
 import '../../order/widgets/order_ticket_bottom_sheet.dart';
 import '../bloc/portfolio_bloc.dart';
-import '../bloc/portfolio_event.dart  Dart.dart';
+import '../bloc/portfolio_event.dart';
 import '../bloc/portfolio_state.dart';
 import '../widgets/holding_tile.dart';
 import '../widgets/holdings_sort_bar.dart';

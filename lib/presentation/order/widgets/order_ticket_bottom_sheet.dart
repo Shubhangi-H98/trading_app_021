@@ -6,10 +6,11 @@ import '../../../core/utils/feedback_helper.dart';
 import '../../../data/model/holding_model.dart';
 import '../../../data/model/order_model.dart';
 import '../../holdings/bloc/portfolio_bloc.dart';
-import '../../holdings/bloc/portfolio_event.dart  Dart.dart';
+import '../../holdings/bloc/portfolio_event.dart';
 import '../../holdings/bloc/portfolio_state.dart';
 import '../../market/bloc/market_bloc.dart';
 import '../../market/bloc/market_state.dart';
+import 'order_status_dialogs.dart';
 
 class OrderTicketBottomSheet extends StatefulWidget {
   final String symbol;
@@ -75,11 +76,12 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
             );
             final availableQty = existingHolding.quantity;
 
-            // Live Inline Validation
+            bool isInsufficientFunds = false;
             String? error = _inlineError;
             if (_quantity > 0) {
               if (_side == OrderType.buy && orderTotal > walletBalance) {
                 error = 'Insufficient funds (Needed: ${CurrencyFormatter.format(orderTotal)})';
+                isInsufficientFunds = true;
               } else if (_side == OrderType.sell && _quantity > availableQty) {
                 error = 'Only $availableQty shares available to sell';
               }
@@ -105,7 +107,6 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Top Header with Symbol & Live LTP
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -149,7 +150,6 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                   ),
                   const SizedBox(height: 20),
 
-                  // BUY / SELL Toggle Selector
                   Row(
                     children: [
                       Expanded(
@@ -187,7 +187,6 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Quantity Input Field
                   TextField(
                     controller: _qtyController,
                     keyboardType: TextInputType.number,
@@ -201,19 +200,23 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Info bar: Available Balance / Quantity
+                  // Overflow-Safe Info Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        isBuy
-                            ? 'Available Balance: ${CurrencyFormatter.format(walletBalance)}'
-                            : 'Held Quantity: $availableQty Shares',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                      Expanded(
+                        child: Text(
+                          isBuy
+                              ? 'Bal: ${CurrencyFormatter.format(walletBalance)}'
+                              : 'Held: $availableQty Shares',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                          ),
                         ),
                       ),
+                      const SizedBox(width: 8),
                       Text(
                         'Total: ${CurrencyFormatter.format(orderTotal)}',
                         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -221,29 +224,51 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                     ],
                   ),
 
-                  // Inline Validation Error message
                   if (error != null) ...[
                     const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.red.shade900.withOpacity(0.4) : AppColors.redFlash,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        error,
-                        style: const TextStyle(
-                          color: AppColors.redDown,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: isDark ? Colors.red.shade900.withOpacity(0.4) : AppColors.redFlash,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              error,
+                              style: const TextStyle(
+                                color: AppColors.redDown,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        if (isInsufficientFunds) ...[
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              AddFundsQuickModal.show(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                            ),
+                            child: const Text(
+                              '+ Add Funds',
+                              style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ],
 
                   const SizedBox(height: 24),
 
-                  // Execute Order Button with Haptic & Sound Confirmation
                   ElevatedButton(
                     onPressed: error == null && _quantity > 0 && currentLtp > 0
                         ? () {
@@ -257,13 +282,13 @@ class _OrderTicketBottomSheetState extends State<OrderTicketBottomSheet> {
                         ),
                       );
                       Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            '${_side.name.toUpperCase()} $_quantity ${widget.symbol} @ ${CurrencyFormatter.format(currentLtp)} successful!',
-                          ),
-                          backgroundColor: isBuy ? AppColors.greenUp : AppColors.primary,
-                        ),
+
+                      OrderSuccessDialog.show(
+                        context,
+                        symbol: widget.symbol,
+                        side: _side.name,
+                        quantity: _quantity,
+                        price: currentLtp,
                       );
                     }
                         : null,

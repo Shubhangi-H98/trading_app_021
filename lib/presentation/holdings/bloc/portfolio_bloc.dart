@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trading_app_021/presentation/holdings/bloc/portfolio_event.dart%20%20Dart.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../data/datasources/local_storage_service.dart';
 import '../../../data/model/holding_model.dart';
 import '../../../data/model/order_model.dart';
+import 'portfolio_event.dart';
 import 'portfolio_state.dart';
 
 class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
@@ -13,6 +13,7 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
     on<LoadPortfolioEvent>(_onLoadPortfolio);
     on<ExecuteOrderEvent>(_onExecuteOrder);
     on<SortHoldingsEvent>(_onSortHoldings);
+    on<AddFundsEvent>(_onAddFunds);
   }
 
   void _onLoadPortfolio(LoadPortfolioEvent event, Emitter<PortfolioState> emit) {
@@ -26,6 +27,15 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
       walletBalance: balance,
       holdings: holdings,
       orders: orders,
+    ));
+  }
+
+  Future<void> _onAddFunds(AddFundsEvent event, Emitter<PortfolioState> emit) async {
+    final updatedBalance = CurrencyFormatter.roundTo2Decimals(state.walletBalance + event.amount);
+    await _storageService.saveWalletBalance(updatedBalance);
+    emit(state.copyWith(
+      walletBalance: updatedBalance,
+      successMessage: '${CurrencyFormatter.format(event.amount)} added to wallet!',
     ));
   }
 

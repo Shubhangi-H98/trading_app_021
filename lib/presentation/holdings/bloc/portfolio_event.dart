@@ -36,3 +36,12 @@ class SortHoldingsEvent extends PortfolioEvent {
   @override
   List<Object?> get props => [criteria];
 }
+
+class AddFundsEvent extends PortfolioEvent {
+  final double amount;
+
+  const AddFundsEvent(this.amount);
+
+  @override
+  List<Object?> get props => [amount];
+}

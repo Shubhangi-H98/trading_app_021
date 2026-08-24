@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:trading_app_021/presentation/holdings/bloc/portfolio_event.dart%20%20Dart.dart';
-
+import 'package:trading_app_021/presentation/holdings/bloc/portfolio_event.dart';
 import '../../../data/model/holding_model.dart';
 import '../../../data/model/order_model.dart';
 
